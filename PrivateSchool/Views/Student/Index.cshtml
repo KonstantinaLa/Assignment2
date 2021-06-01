@@ -1,0 +1,66 @@
+﻿@model IEnumerable<PrivateSchool.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DateOfBirth)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TuitionFees)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Courses)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var student in Model) {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => student.FirstName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => student.LastName)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => student.DateOfBirth)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => student.TuitionFees)
+    </td>
+    <td>
+
+        <ul class="list-unstyled">
+
+            @foreach (var course in student.Courses)
+            {
+                <li>
+                    @course.Title
+                </li>
+            }
+        </ul>
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = student.StudentId }) |
+        @Html.ActionLink("Details", "Details", new { id = student.StudentId }) |
+        @Html.ActionLink("Delete", "Delete", new { id = student.StudentId })
+    </td>
+</tr>
+}
+
+</table>
