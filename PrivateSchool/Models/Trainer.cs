@@ -22,5 +22,6 @@ namespace PrivateSchool.Models
         public string Subject { get; set; }
 
         public virtual ICollection<Course> Courses { get; set; }
+
     }
 }

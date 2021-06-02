@@ -10,6 +10,7 @@ namespace PrivateSchool.Models
         public Student()
         {
             Courses = new HashSet<Course>();
+            Assignments = new HashSet<Assignment>();
         }
       
         public int StudentId { get; set; }
@@ -25,6 +26,7 @@ namespace PrivateSchool.Models
         public int TuitionFees { get; set; }
 
         public virtual ICollection<Course> Courses { get; set; }
+        public virtual ICollection<Assignment> Assignments { get; set; }
 
 
     }

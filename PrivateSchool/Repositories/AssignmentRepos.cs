@@ -14,7 +14,7 @@ namespace PrivateSchool.Repositories
         {
             AssignmentContext = new MyDatabase();
         }
-        public ICollection<Assignment> GetAllAssignments()
+        public IEnumerable<Assignment> GetAllAssignments()
         {
             var assignment = AssignmentContext.Assignments.ToList();
             return assignment;

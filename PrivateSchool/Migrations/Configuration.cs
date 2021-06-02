@@ -43,12 +43,11 @@ namespace PrivateSchool.Migrations
                 context.Assignments.AddOrUpdate(t => new { t.Title, t.Description }, assignment);
             }
 
-
-            var s1 = new Student() { FirstName = "Maria", LastName = "Anagnostou", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c1, c2 } };
-            var s2 = new Student() { FirstName = "Antonis", LastName = "Fournaros", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees= 250, Courses = new Collection<Course>() { c2, c3 }};
-            var s3 = new Student() { FirstName = "George", LastName = "Mpekoy", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c3, c4 } };
-            var s4 = new Student() { FirstName = "Katerina", LastName = "Marinos", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c5, c1 }  };
-            var s5 = new Student() { FirstName = "Anastasia", LastName = "Psalida", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c4, c5 } };
+            var s1 = new Student() { FirstName = "Maria", LastName = "Anagnostou", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c1, c2 }, Assignments = new Collection<Assignment>() { a1, a5, a2 } };
+            var s2 = new Student() { FirstName = "Antonis", LastName = "Fournaros", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees= 250, Courses = new Collection<Course>() { c2, c3 }, Assignments = new Collection<Assignment>() { a3, a2 , a5} };
+            var s3 = new Student() { FirstName = "George", LastName = "Mpekoy", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c3, c4 }, Assignments = new Collection<Assignment>() { a3, a4 ,a5} };
+            var s4 = new Student() { FirstName = "Katerina", LastName = "Marinos", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c5, c1 }, Assignments = new Collection<Assignment>() { a5, a1 } };
+            var s5 = new Student() { FirstName = "Anastasia", LastName = "Psalida", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c4, c5 }, Assignments = new Collection<Assignment>() { a4, a5 } };
             
             var students = new List<Student>() { s1, s2, s3, s4, s5 };
 

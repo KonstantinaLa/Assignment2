@@ -15,7 +15,7 @@ namespace PrivateSchool.Repositories
         {
             TrainerContext = new MyDatabase();
         }
-        public ICollection<Trainer> GetAllTrainers()
+        public IEnumerable<Trainer> GetAllTrainers()
         {
             var trainer = TrainerContext.Trainers.ToList();
             return trainer;

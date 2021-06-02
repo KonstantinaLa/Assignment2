@@ -13,7 +13,6 @@ namespace PrivateSchool.Models
             Trainers = new HashSet<Trainer>();
         }
 
-
         public int CourseId { get; set; }
         public string Title { get; set; }
         public string Stream { get; set; }

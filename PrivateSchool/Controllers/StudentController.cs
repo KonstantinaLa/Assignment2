@@ -1,124 +1,131 @@
-﻿using System.Data.Entity;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PrivateSchool.DAL;
 using PrivateSchool.Models;
+using PrivateSchool.Repositories;
 
 namespace PrivateSchool.Controllers
 {
     public class StudentController : Controller
     {
-        private MyDatabase db = new MyDatabase();
+        private readonly StudentRepos repos;
 
-        // GET: Student
-        public ActionResult Index()
+        public StudentController()
         {
-            return View(db.Students.ToList());
+            repos = new StudentRepos();
         }
 
-        // GET: Student/Details/5
+        public ActionResult Student(string searchStudent, string sortOrder)
+        {
+            var students = repos.GetAllStudents();
+
+            ViewBag.currentName = searchStudent;
+            ViewBag.currentSortOrder = sortOrder;
+
+            ViewBag.NSP = sortOrder == "FirstNameAsc" ? "FirstNameDesc" : "FirstNameAsc";
+            ViewBag.LSP = sortOrder == "LastNameAsc" ? "LastNameDesc" : "LastNameAsc";
+
+            if (!string.IsNullOrWhiteSpace(searchStudent))
+            {
+                students = students.Where(p => p.FirstName.ToUpper().Contains(searchStudent.ToUpper())).ToList();
+            }
+            if (!string.IsNullOrWhiteSpace(searchStudent))
+            {
+                students = students.Where(p => p.FirstName.ToUpper().Contains(searchStudent.ToUpper())).ToList();
+            }
+
+            switch (sortOrder)
+            {
+                case "FirstNameDesc": students = students.OrderByDescending(s => s.FirstName).ToList(); break;
+                case "FirstNameAsc": students = students.OrderBy(s => s.FirstName).ToList(); break;
+
+                case "LastNameDesc": students = students.OrderByDescending(s => s.LastName).ToList(); break;
+                case "LastNameAsc": students = students.OrderBy(s => s.LastName).ToList(); break;
+
+
+                default: students = students.OrderBy(s => s.FirstName).ToList(); break;
+            }
+            return View(students);
+
+        }
+
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var student = repos.FindById(id);
+
+            if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
             return View(student);
         }
 
-        // GET: Student/Create
+        [HttpGet]
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Student/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentId,FirstName,LastName,DateOfBirth,TuitionFees")] Student student)
+        public ActionResult Create([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student)
         {
-            if (ModelState.IsValid)
-            {
-                db.Students.Add(student);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(student);
+            if (!ModelState.IsValid) return View(student);
+            repos.Create(student);
+            return RedirectToAction("Student");
         }
 
-        // GET: Student/Edit/5
+        [HttpGet]
         public ActionResult Edit(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var student = repos.FindById(id);
+
+            if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
             return View(student);
         }
 
-        // POST: Student/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentId,FirstName,LastName,DateOfBirth,TuitionFees")] Student student)
+        public ActionResult Edit([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student)
         {
-            if (ModelState.IsValid)
-            {
-                db.Entry(student).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(student);
+            if (!ModelState.IsValid) return View(student);
+            repos.Edit(student);
+            return RedirectToAction("Student");
         }
 
-        // GET: Student/Delete/5
+        [HttpGet]
         public ActionResult Delete(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Student student = db.Students.Find(id);
-            if (student == null)
-            {
-                return HttpNotFound();
-            }
+            if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            var student = repos.FindById(id);
+
+            if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
             return View(student);
         }
 
-        // POST: Student/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        [ActionName("Delete")]
+        public ActionResult ConfirmDelete(int? id)
         {
-            Student student = db.Students.Find(id);
-            db.Students.Remove(student);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            var student = repos.FindById(id);
+
+            if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+
+            repos.Delete(student);
+            return RedirectToAction("Student");
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                db.Dispose();
-            }
             base.Dispose(disposing);
+            repos.Dispose();
         }
+
     }
 }

@@ -15,7 +15,7 @@ namespace PrivateSchool.Repositories
         {
             StudentContext = new MyDatabase();
         }
-        public ICollection<Student> GetAllStudents()
+        public IEnumerable<Student> GetAllStudents()
         {
             var student = StudentContext.Students.ToList();
             return student;
