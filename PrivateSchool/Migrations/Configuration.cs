@@ -14,7 +14,7 @@ namespace PrivateSchool.Migrations
             AutomaticMigrationsEnabled = true;
         }
 
-        protected override void Seed(PrivateSchool.DAL.MyDatabase context)
+        protected override void Seed(MyDatabase context)
         {
             var c1 = new Course() { Title = "C#", Type = "Online", Stream = "Part Time", StartDate = new DateTime(2021, 2, 15), EndDate = new DateTime(2021, 9, 15) };
             var c2 = new Course() { Title = "Java", Type = "Online", Stream = "Full Time", StartDate = new DateTime(2021, 2, 15), EndDate = new DateTime(2021, 9, 15) };

@@ -11,6 +11,21 @@ namespace PrivateSchool.DAL.Configurations
     { 
          public TrainerConfig()
          {
-         } 
+
+            Property(t => t.FirstName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(t => t.LastName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(t => t.Subject)
+                .IsRequired()
+                .HasMaxLength(50);
+
+
+
+        }
     }
 }

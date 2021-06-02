@@ -14,6 +14,21 @@ namespace PrivateSchool.DAL.Configurations
         {
 
 
+            Property(s => s.FirstName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(s => s.LastName)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(s => s.DateOfBirth)
+                .IsRequired()
+                .HasColumnType("date");
+
+            Property(s => s.TuitionFees)
+                .IsRequired()
+                .HasColumnType("int");
         }
     }
 }

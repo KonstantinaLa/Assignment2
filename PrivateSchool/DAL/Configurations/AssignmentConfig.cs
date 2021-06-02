@@ -12,6 +12,28 @@ namespace PrivateSchool.DAL.Configurations
         public AssignmentConfig()
         {
 
+            Property(a => a.Title)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(a => a.Description)
+                .IsRequired()
+                .HasMaxLength(50);
+
+            Property(a => a.SubDate)
+                .IsRequired()
+                .HasColumnType("date");
+
+            Property(a => a.OralMark)
+                .IsRequired()
+                .HasColumnType("int");
+
+            Property(a => a.TotalMark)
+                .IsRequired()
+                .HasColumnType("int");
+
+           
+
 
         }
     }
