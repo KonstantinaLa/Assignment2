@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+﻿using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
@@ -14,7 +11,11 @@ namespace PrivateSchool.Controllers
     public class AssignmentController : Controller
     {
         private readonly AssignmentRepos repos;
-
+        private MyDatabase db = new MyDatabase();
+        public ActionResult Index()
+        {
+            return View(db.AssignmentsDbSet.ToList());
+        }
         public AssignmentController()
         {
             repos = new AssignmentRepos();
@@ -77,7 +78,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(assignment);
             repos.Create(assignment);
-            return RedirectToAction("Assignment");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -98,7 +99,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(assignment);
             repos.Edit(assignment);
-            return RedirectToAction("Assignment");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -123,7 +124,7 @@ namespace PrivateSchool.Controllers
             if (assignment == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
             repos.Delete(assignment);
-            return RedirectToAction("Assignment");
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

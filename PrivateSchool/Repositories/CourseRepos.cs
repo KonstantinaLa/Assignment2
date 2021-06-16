@@ -17,13 +17,13 @@ namespace PrivateSchool.Repositories
         }
         public IEnumerable<Course> GetAllCourses()
         {
-            var course = CourseContext.Courses.ToList();
+            var course = CourseContext.CoursesDbSet.ToList();
             return course;
         }
 
         public Course FindById(int ? id)
         {
-            var course = CourseContext.Courses.Find(id);
+            var course = CourseContext.CoursesDbSet.Find(id);
             return course;
         }
         public void Create(Course course)

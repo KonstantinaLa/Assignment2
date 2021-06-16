@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrivateSchool.Models.Custom_Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,6 +20,8 @@ namespace PrivateSchool.Models
         public string FirstName { get; set; }
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
+
+        [CustomValidation(typeof(ValidationMethods), "ValidationDate")]
         [Display(Name = "Date Of Birth")]
         public DateTime DateOfBirth { get; set; }
 

@@ -7,7 +7,7 @@
 <h2>Index</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create" ,null, new { @class = "btn btn-success" })
 </p>
 <table class="table">
     <tr>
@@ -26,22 +26,25 @@
         <th>
             @Html.DisplayNameFor(model => model.Courses)
         </th>
-        <th></th>
+        <th>
+            @Html.DisplayNameFor(model => model.Assignments)
+        </th>
+        <th>Actions</th>
     </tr>
 
 @foreach (var student in Model) {
 <tr>
     <td>
-        @Html.DisplayFor(modelItem => student.FirstName)
+        @student.FirstName
     </td>
     <td>
-        @Html.DisplayFor(modelItem => student.LastName)
+        @student.LastName
     </td>
     <td>
-        @Html.DisplayFor(modelItem => student.DateOfBirth)
+        @student.DateOfBirth
     </td>
     <td>
-        @Html.DisplayFor(modelItem => student.TuitionFees)
+        @student.TuitionFees
     </td>
     <td>
 
@@ -51,6 +54,18 @@
             {
                 <li>
                     @course.Title
+                </li>
+            }
+        </ul>
+    </td>
+    <td>
+
+        <ul class="list-unstyled">
+
+            @foreach (var assignment in student.Assignments)
+            {
+                <li>
+                    @assignment.Title
                 </li>
             }
         </ul>

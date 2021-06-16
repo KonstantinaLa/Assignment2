@@ -164,3 +164,9 @@ C:\Users\konst\source\repos\Assignment2\PrivateSchool\obj\Debug\PrivateSchool.cs
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\obj\Debug\PrivateSchool.csproj.CopyComplete
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\obj\Debug\PrivateSchool.dll
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\obj\Debug\PrivateSchool.pdb
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.Mvc.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.ValidatorAttribute.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\System.ComponentModel.Annotations.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.xml
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.Mvc.xml

@@ -3,14 +3,14 @@
 @{
     ViewBag.Title = "Create";
 }
-
+@Html.ActionLink("Back To Students", "Student", null, new { @class = "btn btn-primary" })
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm("Create", "Student", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Student</h4>
         <hr />

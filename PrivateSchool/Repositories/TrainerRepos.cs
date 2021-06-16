@@ -17,13 +17,13 @@ namespace PrivateSchool.Repositories
         }
         public IEnumerable<Trainer> GetAllTrainers()
         {
-            var trainer = TrainerContext.Trainers.ToList();
+            var trainer = TrainerContext.TrainersDbSet.ToList();
             return trainer;
         }
 
         public Trainer FindById(int? id)
         {
-            var trainer = TrainerContext.Trainers.Find(id);
+            var trainer = TrainerContext.TrainersDbSet.Find(id);
             return trainer;
         }
         public void Create(Trainer trainer)

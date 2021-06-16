@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using PrivateSchool.DAL;
 using PrivateSchool.Models;
 using PrivateSchool.Repositories;
 
@@ -9,10 +10,15 @@ namespace PrivateSchool.Controllers
     public class StudentController : Controller
     {
         private readonly StudentRepos repos;
+        private MyDatabase db = new MyDatabase();
 
         public StudentController()
         {
             repos = new StudentRepos();
+        }
+        public ActionResult Index()
+        {
+            return View(db.StudentsDbSet.ToList());
         }
 
         public ActionResult Student(string searchStudent, string sortOrder)
@@ -72,7 +78,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(student);
             repos.Create(student);
-            return RedirectToAction("Student");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -93,7 +99,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(student);
             repos.Edit(student);
-            return RedirectToAction("Student");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -118,7 +124,7 @@ namespace PrivateSchool.Controllers
             if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
             repos.Delete(student);
-            return RedirectToAction("Student");
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)

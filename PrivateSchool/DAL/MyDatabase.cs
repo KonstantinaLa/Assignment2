@@ -10,10 +10,10 @@ namespace PrivateSchool.DAL
         {
 
         }
-        public DbSet<Student> Students { get; set; }
-        public DbSet<Trainer> Trainers { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<Assignment> Assignments { get; set; }
+        public DbSet<Student> StudentsDbSet { get; set; }
+        public DbSet<Trainer> TrainersDbSet { get; set; }
+        public DbSet<Course> CoursesDbSet { get; set; }
+        public DbSet<Assignment> AssignmentsDbSet { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

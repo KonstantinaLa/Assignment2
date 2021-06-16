@@ -16,13 +16,13 @@ namespace PrivateSchool.Repositories
         }
         public IEnumerable<Assignment> GetAllAssignments()
         {
-            var assignment = AssignmentContext.Assignments.ToList();
+            var assignment = AssignmentContext.AssignmentsDbSet.ToList();
             return assignment;
         }
 
         public Assignment FindById(int? id)
         {
-            var assignment = AssignmentContext.Assignments.Find(id);
+            var assignment = AssignmentContext.AssignmentsDbSet.Find(id);
             return assignment;
         }
         public void Create(Assignment assignment)

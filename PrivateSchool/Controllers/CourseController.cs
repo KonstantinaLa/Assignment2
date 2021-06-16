@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -13,11 +14,17 @@ namespace PrivateSchool.Controllers
 {
     public class CourseController : Controller
     {
+
+        private MyDatabase db = new MyDatabase();
         private readonly CourseRepos repos;
 
         public CourseController()
         {
             repos = new CourseRepos();
+        }
+        public ActionResult Index()
+        {
+            return View(db.CoursesDbSet.ToList());
         }
 
         public ActionResult Assignment(string searchTitle, string sortOrder)
@@ -68,7 +75,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(course);
             repos.Create(course);
-            return RedirectToAction("Course");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -89,7 +96,7 @@ namespace PrivateSchool.Controllers
         {
             if (!ModelState.IsValid) return View(course);
             repos.Edit(course);
-            return RedirectToAction("Course");
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -114,7 +121,7 @@ namespace PrivateSchool.Controllers
             if (course == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
             repos.Delete(course);
-            return RedirectToAction("Course");
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
@@ -124,3 +131,7 @@ namespace PrivateSchool.Controllers
         }
     }
 }
+
+
+
+

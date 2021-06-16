@@ -16,6 +16,8 @@ namespace PrivateSchool.Migrations
 
         protected override void Seed(MyDatabase context)
         {
+
+            //Courses
             var c1 = new Course() { Title = "C#", Type = "Online", Stream = "Part Time", StartDate = new DateTime(2021, 2, 15), EndDate = new DateTime(2021, 9, 15) };
             var c2 = new Course() { Title = "Java", Type = "Online", Stream = "Full Time", StartDate = new DateTime(2021, 2, 15), EndDate = new DateTime(2021, 9, 15) };
             var c3 = new Course() { Title = "JavaScript", Type = "Online", Stream = "Part Time", StartDate = new DateTime(2021, 2, 15), EndDate = new DateTime(2021, 9, 15) };
@@ -26,10 +28,10 @@ namespace PrivateSchool.Migrations
 
             foreach (var course in courses)
             {
-                context.Courses.AddOrUpdate(c => new { c.Title, c.Type, c.Stream, c.StartDate }, course);
+                context.CoursesDbSet.AddOrUpdate(c => new { c.Title, c.Type, c.Stream, c.StartDate }, course);
 
             }
-
+            //Assignment
             var a1 = new Assignment() { Title = "ProjectC#", Description = "Individual", SubDate = new DateTime(2021, 5, 15), OralMark = 40, TotalMark = 100, Courses = new Collection<Course>() { c1, c5 } };
             var a2 = new Assignment() { Title = "ProjectJava", Description = "Individual", SubDate = new DateTime(2021, 5, 1), OralMark = 50, TotalMark = 100, Courses = new Collection<Course>() { c2, c5 } };
             var a3 = new Assignment() { Title = "ProjectJavaScript", Description = "Individual", SubDate = new DateTime(2021, 6, 17), OralMark = 30, TotalMark = 100, Courses = new Collection<Course>() { c3, c5 } };
@@ -40,9 +42,9 @@ namespace PrivateSchool.Migrations
 
             foreach (var assignment in assignments)
             {
-                context.Assignments.AddOrUpdate(t => new { t.Title, t.Description }, assignment);
+                context.AssignmentsDbSet.AddOrUpdate(t => new { t.Title, t.Description }, assignment);
             }
-
+            //Student
             var s1 = new Student() { FirstName = "Maria", LastName = "Anagnostou", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c1, c2 }, Assignments = new Collection<Assignment>() { a1, a5, a2 } };
             var s2 = new Student() { FirstName = "Antonis", LastName = "Fournaros", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees= 250, Courses = new Collection<Course>() { c2, c3 }, Assignments = new Collection<Assignment>() { a3, a2 , a5} };
             var s3 = new Student() { FirstName = "George", LastName = "Mpekoy", DateOfBirth = new DateTime(1998, 9, 8), TuitionFees = 250, Courses = new Collection<Course>() { c3, c4 }, Assignments = new Collection<Assignment>() { a3, a4 ,a5} };
@@ -53,9 +55,11 @@ namespace PrivateSchool.Migrations
 
             foreach (var student in students)
             {
-                context.Students.AddOrUpdate(s => new {s.FirstName, s.LastName, s.DateOfBirth},student);
+                context.StudentsDbSet.AddOrUpdate(s => new {s.FirstName, s.LastName, s.DateOfBirth},student);
 
             }
+
+            //Trainer
             var t1 = new Trainer() { FirstName = "Marios", LastName = "Kanistras", Subject="Programmer", Courses= new Collection<Course>() { c1, c2 } };
             var t2 = new Trainer() { FirstName = "Kostas", LastName = "Papadopoulos", Subject= "Programmer", Courses = new Collection<Course>() { c2, c3 } };
             var t3 = new Trainer() { FirstName = "Thanos", LastName = "Kanelopoulos", Subject= "Programmer", Courses = new Collection<Course>() { c3, c4 } };
@@ -66,7 +70,7 @@ namespace PrivateSchool.Migrations
 
             foreach (var trainer in trainers)
             {
-                context.Trainers.AddOrUpdate(t => new {t.FirstName, t.LastName},trainer);
+                context.TrainersDbSet.AddOrUpdate(t => new {t.FirstName, t.LastName},trainer);
 
             }
 

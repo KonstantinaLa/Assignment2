@@ -15,15 +15,15 @@ namespace PrivateSchool.Repositories
         {
             StudentContext = new MyDatabase();
         }
-        public IEnumerable<Student> GetAllStudents()
+        public ICollection<Student> GetAllStudents()
         {
-            var student = StudentContext.Students.ToList();
-            return student;
+            var students = StudentContext.StudentsDbSet.ToList();
+            return students;
         }
 
         public Student FindById(int? id)
         {
-            var student = StudentContext.Students.Find(id);
+            var student = StudentContext.StudentsDbSet.Find(id);
             return student;
         }
         public void Create(Student student)
