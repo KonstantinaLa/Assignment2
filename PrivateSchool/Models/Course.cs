@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrivateSchool.Models.Custom_Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -19,9 +20,11 @@ namespace PrivateSchool.Models
         public string Type { get; set; }
 
         [Display(Name = "Start Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End Date")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; }

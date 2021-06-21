@@ -17,6 +17,7 @@ namespace PrivateSchool.Models
         public string Description { get; set; }
 
         [Display (Name = "Submition Date")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime SubDate { get; set; }
 
         [Display(Name ="Oral Mark")]

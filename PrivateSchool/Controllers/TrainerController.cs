@@ -1,30 +1,30 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PrivateSchool.DAL;
 using PrivateSchool.Models;
+using PrivateSchool.Models.ViewModels;
 using PrivateSchool.Repositories;
 
 namespace PrivateSchool.Controllers
 {
     public class TrainerController : Controller
     {
+        private readonly TrainerRepos trainerrepos;
+        private readonly CourseRepos courserepos;
+        
 
-        private MyDatabase db = new MyDatabase();
-        private readonly TrainerRepos repos;
 
         public TrainerController()
         {
-            repos = new TrainerRepos();
-        }
-        public ActionResult Index()
-        {
-            return View(db.TrainersDbSet.ToList());
+            trainerrepos = new TrainerRepos();
+            courserepos = new CourseRepos();
         }
 
-        public ActionResult Student(string searchTrainer, string sortOrder)
+        public ActionResult Index(string searchTrainer, string sortOrder)
         {
-            var trainers = repos.GetAllTrainers();
+            var trainers = trainerrepos.GetAllTrainers();
 
             ViewBag.currentName = searchTrainer;
             ViewBag.currentSortOrder = sortOrder;
@@ -36,10 +36,7 @@ namespace PrivateSchool.Controllers
             {
                 trainers = trainers.Where(p => p.FirstName.ToUpper().Contains(searchTrainer.ToUpper())).ToList();
             }
-            if (!string.IsNullOrWhiteSpace(searchTrainer))
-            {
-                trainers = trainers.Where(p => p.FirstName.ToUpper().Contains(searchTrainer.ToUpper())).ToList();
-            }
+
 
             switch (sortOrder)
             {
@@ -52,6 +49,7 @@ namespace PrivateSchool.Controllers
 
                 default: trainers = trainers.OrderBy(s => s.FirstName).ToList(); break;
             }
+
             return View(trainers);
 
         }
@@ -60,7 +58,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var trainer = repos.FindById(id);
+            var trainer = trainerrepos.FindById(id);
 
             if (trainer == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -70,16 +68,22 @@ namespace PrivateSchool.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            TrainerCreateViewModel vm = new TrainerCreateViewModel(courserepos);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "TrainerId, FirstName, LastName, Subject")] Trainer trainer)
+        public ActionResult Create([Bind(Include = "TrainerId, FirstName, LastName, Subject")] Trainer trainer, IEnumerable<int> SelectCourseIds)
         {
-            if (!ModelState.IsValid) return View(trainer);
-            repos.Create(trainer);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                trainerrepos.Create(trainer, SelectCourseIds);
+                return RedirectToAction("Index");
+            }
+
+            TrainerCreateViewModel vm = new TrainerCreateViewModel(courserepos);
+            return View(vm);
         }
 
         [HttpGet]
@@ -87,20 +91,28 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var trainer = repos.FindById(id);
+            var trainer = trainerrepos.FindById(id);
 
             if (trainer == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
-            return View(trainer);
+            TrainerEditViewModel vm = new TrainerEditViewModel(trainer,courserepos);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Trainer trainer)
+        public ActionResult Edit([Bind(Include = "TrainerId, FirstName, LastName, Subject")] Trainer trainer,IEnumerable<int> SelectCourseIds)
         {
-            if (!ModelState.IsValid) return View(trainer);
-            repos.Edit(trainer);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                trainerrepos.Edit(trainer,SelectCourseIds);
+
+                return RedirectToAction("Index");
+            }
+
+            TrainerEditViewModel vm = new TrainerEditViewModel(trainer,courserepos);
+            return View(vm);
+            
         }
 
         [HttpGet]
@@ -108,7 +120,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var trainer = repos.FindById(id);
+            var trainer = trainerrepos.FindById(id);
 
             if (trainer == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -118,20 +130,20 @@ namespace PrivateSchool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(int? id)
+        public ActionResult ConfirmDelete(int id)
         {
-            var trainer = repos.FindById(id);
-
-            if (trainer == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            repos.Delete(trainer);
+            trainerrepos.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                trainerrepos.Dispose();
+            }
             base.Dispose(disposing);
-            repos.Dispose();
+            
         }
 
     }

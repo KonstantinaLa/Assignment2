@@ -1,13 +1,11 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PrivateSchool.DAL;
 using PrivateSchool.Models;
+using PrivateSchool.Models.ViewModels;
 using PrivateSchool.Repositories;
 
 namespace PrivateSchool.Controllers
@@ -15,21 +13,22 @@ namespace PrivateSchool.Controllers
     public class CourseController : Controller
     {
 
-        private MyDatabase db = new MyDatabase();
-        private readonly CourseRepos repos;
+        private readonly StudentRepos studentrepos;
+        private readonly TrainerRepos trainerrepos;
+        private readonly AssignmentRepos assignmentrepos;
+        private readonly CourseRepos courserepos;
 
         public CourseController()
         {
-            repos = new CourseRepos();
-        }
-        public ActionResult Index()
-        {
-            return View(db.CoursesDbSet.ToList());
+            courserepos = new CourseRepos();
+            trainerrepos = new TrainerRepos();
+            assignmentrepos = new AssignmentRepos();
+            studentrepos = new StudentRepos();
         }
 
-        public ActionResult Assignment(string searchTitle, string sortOrder)
+        public ActionResult Index(string searchTitle, string sortOrder)
         {
-            var courses = repos.GetAllCourses();
+            var courses = courserepos.GetAllCourses();
 
             ViewBag.currentTitle = searchTitle;
             ViewBag.currentSortOrder = sortOrder;
@@ -56,7 +55,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var course = repos.FindById(id);
+            var course = courserepos.FindById(id);
 
             if (course == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -66,16 +65,24 @@ namespace PrivateSchool.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            CourseCreateViewModel vm = new CourseCreateViewModel(studentrepos,assignmentrepos,trainerrepos);
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CourseId, Title, Stream, Type, Start Date, End Date")] Course course)
+        public ActionResult Create([Bind(Include = "CourseId, Title, Stream, Type, StartDate, EndDate")] Course course, IEnumerable<int> SelectStudentIds, IEnumerable<int> SelectAssignmentIds, IEnumerable<int> SelectTrainerIds)
         {
-            if (!ModelState.IsValid) return View(course);
-            repos.Create(course);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid) 
+            {
+                courserepos.Create(course, SelectStudentIds, SelectAssignmentIds, SelectTrainerIds);
+                return RedirectToAction("Index");
+            }
+
+            CourseCreateViewModel vm = new CourseCreateViewModel(studentrepos,assignmentrepos,trainerrepos);
+            return View(vm);
+            
         }
 
         [HttpGet]
@@ -83,20 +90,27 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var course = repos.FindById(id);
+            var course = courserepos.FindById(id);
 
             if (course == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
-            return View(course);
+            CourseEditViewModel vm = new CourseEditViewModel(course,studentrepos,assignmentrepos,trainerrepos);
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CourseId, Title, Stream, Type, Start Date, End Date")] Course course)
+        public ActionResult Edit([Bind(Include = "CourseId, Title, Stream, Type, StartDate, EndDate")] Course course,  IEnumerable<int> SelectStudentIds, IEnumerable<int> SelectAssignmentIds, IEnumerable<int> SelectTrainerIds)
         {
-            if (!ModelState.IsValid) return View(course);
-            repos.Edit(course);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                courserepos.Edit(course, SelectStudentIds, SelectAssignmentIds, SelectTrainerIds);
+                return RedirectToAction("Index");
+            }
+
+            CourseEditViewModel vm = new CourseEditViewModel(course,studentrepos,assignmentrepos,trainerrepos);
+            return View(vm);
+  
         }
 
         [HttpGet]
@@ -104,7 +118,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var course = repos.FindById(id);
+            var course = courserepos.FindById(id);
 
             if (course == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -114,20 +128,21 @@ namespace PrivateSchool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(int? id)
+        public ActionResult ConfirmDelete(int id)
         {
-            var course = repos.FindById(id);
 
-            if (course == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            repos.Delete(course);
+            courserepos.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                courserepos.Dispose();
+            }
             base.Dispose(disposing);
-            repos.Dispose();
+            
         }
     }
 }

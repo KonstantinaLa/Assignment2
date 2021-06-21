@@ -6,7 +6,7 @@ namespace PrivateSchool.Models.Custom_Validations
 {
     public class ValidationMethods
     {
-        public static ValidationResult ValidationDate(DateTime value , ValidationContext context)
+        public static ValidationResult ValidationAdult(DateTime value , ValidationContext context)
         {
             var date = DateTime.Now.Year - 18;
             if (value.Year < date)

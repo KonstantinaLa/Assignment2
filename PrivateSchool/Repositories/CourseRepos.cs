@@ -26,31 +26,124 @@ namespace PrivateSchool.Repositories
             var course = CourseContext.CoursesDbSet.Find(id);
             return course;
         }
-        public void Create(Course course)
+        public void Create(Course course, IEnumerable<int> SelectStudentIds, IEnumerable<int> SelectAssignmentIds, IEnumerable<int> SelectTrainerIds)
         {
+            Attach(course);
+            CourseContext.SaveChanges();
+
+            if (!(SelectStudentIds is null))
+            {
+                foreach (var id in SelectStudentIds)
+                {
+                    var student = CourseContext.StudentsDbSet.Find(id);
+                    if (!(student is null))
+                    {
+                        course.Students.Add(student);
+                    }
+                }
+            }
+
+            if (!(SelectAssignmentIds is null))
+            {
+                foreach (var id in SelectAssignmentIds)
+                {
+                    var assignment = CourseContext.AssignmentsDbSet.Find(id);
+                    if (!(assignment is null))
+                    {
+                        course.Assignments.Add(assignment);
+                    }
+                }
+            }
+
+            if (!(SelectTrainerIds is null))
+            {
+                foreach (var id in SelectTrainerIds)
+                {
+                    var trainer = CourseContext.TrainersDbSet.Find(id);
+                    if (!(trainer is null))
+                    {
+                        course.Trainers.Add(trainer);
+                    }
+                }
+            }
+
+
             CourseContext.Entry(course).State = EntityState.Added;
             SaveChanges();
         }
-        public void Edit(Course course)
+        public void Edit(Course course, IEnumerable<int> SelectStudentIds, IEnumerable<int> SelectAssignmentIds, IEnumerable<int> SelectTrainerIds)
         {
+            Attach(course);
+            course.Students.Clear();
+            course.Assignments.Clear();
+            course.Trainers.Clear();
+            CourseContext.SaveChanges();
+
+            if (!(SelectStudentIds is null))
+            {
+                foreach (var id in SelectStudentIds)
+                {
+                    var student = CourseContext.StudentsDbSet.Find(id);
+                    if (!(student is null))
+                    {
+                        course.Students.Add(student);
+                    }
+                }
+            }
+
+            if (!(SelectAssignmentIds is null))
+            {
+                foreach (var id in SelectAssignmentIds)
+                {
+                    var assignment = CourseContext.AssignmentsDbSet.Find(id);
+                    if (!(assignment is null))
+                    {
+                        course.Assignments.Add(assignment);
+                    }
+                }
+            }
+
+            if (!(SelectTrainerIds is null))
+            {
+                foreach (var id in SelectTrainerIds)
+                {
+                    var trainer = CourseContext.TrainersDbSet.Find(id);
+                    if (!(trainer is null))
+                    {
+                        course.Trainers.Add(trainer);
+                    }
+                }
+            }
             CourseContext.Entry(course).State = EntityState.Modified;
             SaveChanges();
         }
-
-        public void Delete(Course course)
+        public void Attach(Course course)
         {
-                CourseContext.Entry(course).State = EntityState.Deleted;
+            CourseContext.CoursesDbSet.Attach(course);
+            CourseContext.Entry(course).Collection("Students").Load();
+            CourseContext.Entry(course).Collection("Assignments").Load();
+            CourseContext.Entry(course).Collection("Trainers").Load();
+        }
+
+        public void Delete(int id)
+        {
+            var course = FindById(id);
+            course.Students.Clear();
+            course.Trainers.Clear();
+            course.Assignments.Clear();
+
+            CourseContext.Entry(course).State = EntityState.Deleted;
             SaveChanges();
         }
 
         public void Dispose()
         {
-                CourseContext.Dispose();
+            CourseContext.Dispose();
         }
 
         public void SaveChanges()
         {
-                CourseContext.SaveChanges();
+           CourseContext.SaveChanges();
         }
 
     }

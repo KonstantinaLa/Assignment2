@@ -4,42 +4,67 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Trainer</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-success" })
 </p>
+
+@using (Html.BeginForm("Index", "Trainer", FormMethod.Get))
+{
+    @Html.TextBox("searchTrainer", null, new { @class = "form-control", placeholder = "Search Firstname", type = "search", autocomplete = "off" })
+
+
+    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
+
+    <input id="submitButton" type="submit" value="Search" class="btn btn-info btn-sm" />
+    <input id="resetButton" type="button" value="Reset" class="btn btn-default btn-sm" />
+
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.ActionLink("Firstname", "Index", "Trainer", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.ActionLink("Lastname", "Index", "Trainer", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Subject)
         </th>
-        <th></th>
+        <th>Courses</th>
+        <th>Action</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Subject)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.TrainerId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.TrainerId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.TrainerId })
-        </td>
-    </tr>
-}
+    @foreach (var trainer in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => trainer.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trainer.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => trainer.Subject)
+            </td>
+            <td>
+                <ul class="list-unstyled">
+
+                    @foreach (var course in trainer.Courses)
+                    {
+                        <li>
+                            @course.Title
+                        </li>
+                    }
+                </ul>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = trainer.TrainerId }) |
+                @Html.ActionLink("Details", "Details", new { id = trainer.TrainerId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = trainer.TrainerId })
+            </td>
+        </tr>
+    }
 
 </table>

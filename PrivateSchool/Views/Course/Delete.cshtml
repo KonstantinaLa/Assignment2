@@ -50,7 +50,57 @@
         <dd>
             @Html.DisplayFor(model => model.EndDate)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Students)
+        </dt>
+        <dd>
+            @if (Model.Students.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var student in Model.Students)
+                    {
+                        <li>
+                            @student.FirstName @student.LastName
+                        </li>
 
+                    }
+                </ul>
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Assignments)
+        </dt>
+        <dd>
+            @if (Model.Assignments.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var assignment in Model.Assignments)
+                    {
+                        <li>
+                            @assignment.Title
+                        </li>
+
+                    }
+                </ul>
+            }
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Trainers)
+        </dt>
+        <dd>
+            @if (Model.Trainers.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var trainer in Model.Trainers)
+                    {
+                        <li>
+                            @trainer.FirstName @trainer.LastName
+                        </li>
+
+                    }
+                </ul>
+            }
+        </dd>
     </dl>
 
     @using (Html.BeginForm()) {

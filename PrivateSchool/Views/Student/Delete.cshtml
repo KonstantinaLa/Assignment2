@@ -48,15 +48,35 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Courses)
-        </dd>
+            @if (Model.Courses.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var course in Model.Courses)
+                    {
+                        <li>
+                            @course.Title
+                        </li>
 
+                    }
+                </ul>
+            }
+        </dd>    
         <dt>
             @Html.DisplayNameFor(model => model.Assignments)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Assignments)
+            @if (Model.Assignments.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var assignment in Model.Assignments)
+                    {
+                        <li>
+                            @assignment.Title
+                        </li>
+
+                    }
+                </ul>
+            }
         </dd>
 
     </dl>

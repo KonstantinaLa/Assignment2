@@ -56,7 +56,23 @@
                     }
                 </ul>
             }
+        </dd>    
+        <dt>
+            @Html.DisplayNameFor(model => model.Assignments)
+        </dt>
+        <dd>
+            @if (Model.Assignments.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var assignment in Model.Assignments)
+                    {
+                        <li>
+                            @assignment.Title
+                        </li>
 
+                    }
+                </ul>
+            }
         </dd>
 
     </dl>

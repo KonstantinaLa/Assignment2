@@ -16,6 +16,7 @@ namespace PrivateSchool.Models.Custom_Validations
                 .NotEmpty()
                 .WithMessage("Required")
                 .Length(2, 20)
+                .Matches("^[a-zA-Z_ ]*$")
                 .WithMessage("Length 2-20 characters");
 
             RuleFor(a => a.SubDate)

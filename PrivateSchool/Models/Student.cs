@@ -21,8 +21,9 @@ namespace PrivateSchool.Models
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [CustomValidation(typeof(ValidationMethods), "ValidationDate")]
+        [CustomValidation(typeof(ValidationMethods), "ValidationAdult")]
         [Display(Name = "Date Of Birth")]
+        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
         [Display(Name = "Tuition Fees")]

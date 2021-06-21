@@ -25,11 +25,12 @@ namespace PrivateSchool.DAL.Configurations
                 .HasMaxLength(50);
 
             Property(c => c.StartDate)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnType("date");
 
             Property(c => c.EndDate)
-                .IsRequired();
-
+                .IsRequired()
+                .HasColumnType("date");
 
             //TrainerCourse
             HasMany(t => t.Trainers)

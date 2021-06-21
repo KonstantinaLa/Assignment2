@@ -1,18 +1,31 @@
-﻿@model IEnumerable<PrivateSchool.Models.Assignment>
+﻿@using Antlr.Runtime.Tree
+@model IEnumerable<PrivateSchool.Models.Assignment>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Assignment</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-create" })
 </p>
+
+@using (Html.BeginForm("Index", "Assignment", FormMethod.Get))
+{
+    @Html.TextBox("searchTitle", null, new { @class = "form-control", placeholder = "Search Title", type = "search", autocomplete = "off" })
+
+
+    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
+
+    <input id="submitButton" type="submit" value="Search" class="btn btn-sm btn-sub" />
+    <input id="resetButton" type="button" value="Reset" class="btn  btn-sm" />
+
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink("Title", "Index", "Assignment", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Description)
@@ -26,32 +39,119 @@
         <th>
             @Html.DisplayNameFor(model => model.TotalMark)
         </th>
-        <th></th>
+        <th>Courses</th>
+        <th>Action</th>
     </tr>
 
-@foreach (var assignment in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => assignment.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => assignment.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => assignment.SubDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => assignment.OralMark)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => assignment.TotalMark)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id= assignment.AssignmentId }) |
-            @Html.ActionLink("Details", "Details", new { id= assignment.AssignmentId }) |
-            @Html.ActionLink("Delete", "Delete", new { id= assignment.AssignmentId })
-        </td>
-    </tr>
-}
+    @foreach (var assignment in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => assignment.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => assignment.Description)
+            </td>
+            <td>
+                @assignment.SubDate.ToString("d")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => assignment.OralMark)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => assignment.TotalMark)
+            </td>
+            <td>
+                <ul class="list-unstyled">
+
+                    @foreach (var course in assignment.Courses)
+                    {
+                        <li>
+                            @course.Title
+                        </li>
+                    }
+                </ul>
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = assignment.AssignmentId })|
+                @Html.ActionLink("Details", "Details", new { id = assignment.AssignmentId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = assignment.AssignmentId })
+            </td>
+        </tr>
+    }
 
 </table>
+
+@section MYCustomCSS{
+    <style>
+        body {
+            background-color: #d0c4c4;
+            color: #222;
+        }
+
+        .table {
+            margin: 10px;
+        }
+
+        #resetButton {
+            margin: 10px;
+            background-color: #Ab6C82;
+            color:#f3e7e7 ;
+        }
+
+        #submitButton {
+            margin: 10px 10px 10px 0;
+            background-color: #D8737F;
+            color: #f3e7e7;
+        }
+        .btn-create {
+            background-color: #fcbb6d;
+            color: #4a4646;
+        }
+        .btn-edit-details {
+            background-color: #85a1b2;
+            color: #f3e7e7;
+        }
+
+        .btn-delete {
+            background-color: #f55454;
+            color: #f3e7e7;
+        }
+        .btn-edit {
+            background-color: #4853ae;
+            color: #e0d0d0;
+        }
+
+
+        h2 {
+            color: #302e2e;
+        }
+
+        .table th {
+            background-color: #475c7A;
+            color: #d0c4c4;
+        }
+
+        tr:hover {
+            background-color: #d4cece;
+        }
+
+        .sorting-btn {
+            color: inherit;
+        }
+    </style>
+
+}
+
+@section scripts
+{
+    <script>
+
+        $("#resetButton").click(function (e) {
+
+            $("#searchTitle").val("");
+        }
+        );
+
+    </script>
+}

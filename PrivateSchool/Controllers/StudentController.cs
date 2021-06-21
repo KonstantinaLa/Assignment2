@@ -1,29 +1,30 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 using PrivateSchool.DAL;
 using PrivateSchool.Models;
+using PrivateSchool.Models.ViewModels;
 using PrivateSchool.Repositories;
 
 namespace PrivateSchool.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly StudentRepos repos;
-        private MyDatabase db = new MyDatabase();
+        private readonly StudentRepos studentrepos;
+        private readonly CourseRepos courserepos;
+        private readonly AssignmentRepos assignmentrepos;
 
         public StudentController()
         {
-            repos = new StudentRepos();
-        }
-        public ActionResult Index()
-        {
-            return View(db.StudentsDbSet.ToList());
+            studentrepos = new StudentRepos();
+            courserepos = new CourseRepos();
+            assignmentrepos = new AssignmentRepos();
         }
 
-        public ActionResult Student(string searchStudent, string sortOrder)
+        public ActionResult Index(string searchStudent, string sortOrder)
         {
-            var students = repos.GetAllStudents();
+            var students = studentrepos.GetAllStudents();
 
             ViewBag.currentName = searchStudent;
             ViewBag.currentSortOrder = sortOrder;
@@ -35,10 +36,7 @@ namespace PrivateSchool.Controllers
             {
                 students = students.Where(p => p.FirstName.ToUpper().Contains(searchStudent.ToUpper())).ToList();
             }
-            if (!string.IsNullOrWhiteSpace(searchStudent))
-            {
-                students = students.Where(p => p.FirstName.ToUpper().Contains(searchStudent.ToUpper())).ToList();
-            }
+
 
             switch (sortOrder)
             {
@@ -51,6 +49,7 @@ namespace PrivateSchool.Controllers
 
                 default: students = students.OrderBy(s => s.FirstName).ToList(); break;
             }
+
             return View(students);
 
         }
@@ -59,7 +58,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var student = repos.FindById(id);
+            var student = studentrepos.FindById(id);
 
             if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -69,16 +68,25 @@ namespace PrivateSchool.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            return View();
+            StudentCreateViewModel vm = new StudentCreateViewModel(assignmentrepos,courserepos);
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student)
+        public ActionResult Create([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student, IEnumerable<int> SelectCourseIds, IEnumerable<int> SelectAssignmentIds)
         {
-            if (!ModelState.IsValid) return View(student);
-            repos.Create(student);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                studentrepos.Create(student, SelectCourseIds, SelectAssignmentIds);
+
+                return RedirectToAction("Index");
+            }
+
+            StudentCreateViewModel vm = new StudentCreateViewModel(assignmentrepos,courserepos);
+
+            return View(vm);
         }
 
         [HttpGet]
@@ -86,20 +94,28 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var student = repos.FindById(id);
+            var student = studentrepos.FindById(id);
 
             if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
-            return View(student);
+            StudentEditViewModel vm = new StudentEditViewModel(student,assignmentrepos,courserepos);
+
+            return View(vm);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student)
+        public ActionResult Edit([Bind(Include = "StudentId, FirstName, LastName, DateOfBirth, TuitionFees")] Student student, IEnumerable<int> SelectCourseIds, IEnumerable<int> SelectAssignmentIds)
         {
-            if (!ModelState.IsValid) return View(student);
-            repos.Edit(student);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                studentrepos.Edit(student, SelectCourseIds, SelectAssignmentIds);
+                return RedirectToAction("Index");
+            }
+
+            StudentEditViewModel vm = new StudentEditViewModel(student,assignmentrepos,courserepos);
+            return View(vm);
+
         }
 
         [HttpGet]
@@ -107,7 +123,7 @@ namespace PrivateSchool.Controllers
         {
             if (id == null) return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            var student = repos.FindById(id);
+            var student = studentrepos.FindById(id);
 
             if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
 
@@ -117,20 +133,20 @@ namespace PrivateSchool.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Delete")]
-        public ActionResult ConfirmDelete(int? id)
+        public ActionResult ConfirmDelete(int id)
         {
-            var student = repos.FindById(id);
-
-            if (student == null) return new HttpStatusCodeResult(HttpStatusCode.NotFound);
-
-            repos.Delete(student);
+            studentrepos.Delete(id);
             return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                studentrepos.Dispose();
+            }
             base.Dispose(disposing);
-            repos.Dispose();
+
         }
 
     }

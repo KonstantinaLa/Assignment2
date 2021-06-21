@@ -51,6 +51,24 @@
             @Html.DisplayFor(model => model.TotalMark)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.Courses)
+        </dt>
+
+        <dd>
+            @if (Model.Courses.Count > 0)
+            {
+                <ul class="list-unstyled">
+                    @foreach (var course in Model.Courses)
+                    {
+                        <li>
+                            @course.Title
+                        </li>
+
+                    }
+                </ul>
+            }
+        </dd>
     </dl>
 
     @using (Html.BeginForm()) {

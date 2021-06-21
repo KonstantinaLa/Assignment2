@@ -10,7 +10,7 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
-@using (Html.BeginForm("Index", "Assignment", FormMethod.Post)) 
+@using (Html.BeginForm()) 
 {
     @Html.AntiForgeryToken()
     

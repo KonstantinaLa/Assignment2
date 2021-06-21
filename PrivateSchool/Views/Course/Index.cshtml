@@ -4,15 +4,26 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Course</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
 </p>
+@using (Html.BeginForm("Index", "Course", FormMethod.Get))
+{
+    @Html.TextBox("searchTitle", null, new { @class = "form-control", placeholder = "Search Title", type = "search", autocomplete = "off" })
+
+
+    <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
+
+    <input id="submitButton" type="submit" value="Search" class="btn btn-info btn-sm" />
+    <input id="resetButton" type="button" value="Reset" class="btn btn-default btn-sm" />
+
+}
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            @Html.ActionLink("Title", "Index", "Course", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Stream)
@@ -26,32 +37,70 @@
         <th>
             @Html.DisplayNameFor(model => model.EndDate)
         </th>
-        <th></th>
+        <th>Students</th>
+        <th>Assignments</th>
+        <th>Trainers</th>
+        <th>Action</th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Stream)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Type)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StartDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.EndDate)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CourseId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CourseId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CourseId })
-        </td>
-    </tr>
-}
+    @foreach (var course in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => course.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => course.Stream)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => course.Type)
+            </td>
+            <td>
+                @course.StartDate.ToString("d")
+            </td>
+            <td>
+                @course.EndDate.ToString("d")
+            </td>
+            <td>
+                <ul class="list-unstyled">
+
+                    @foreach (var student in course.Students)
+                    {
+                        <li>
+                            @student.FirstName @student.LastName
+                        </li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <ul class="list-unstyled">
+
+                    @foreach (var assignment in course.Assignments)
+                    {
+                        <li>
+                            @assignment.Title 
+                        </li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <ul class="list-unstyled">
+
+                    @foreach (var trainer in course.Trainers)
+                    {
+                        <li>
+                            @trainer.FirstName  @trainer.LastName 
+                        </li>
+                    }
+                </ul>
+            </td>
+            
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = course.CourseId }) |
+                @Html.ActionLink("Details", "Details", new { id = course.CourseId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = course.CourseId })
+            </td>
+        </tr>
+    }
 
 </table>
