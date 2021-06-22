@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PrivateSchool.Models.Course>
+﻿@model PagedList.IPagedList<PrivateSchool.Models.Course>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Index";
@@ -7,7 +8,7 @@
 <h2>Course</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-create" })
 </p>
 @using (Html.BeginForm("Index", "Course", FormMethod.Get))
 {
@@ -17,7 +18,7 @@
     <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
 
     <input id="submitButton" type="submit" value="Search" class="btn btn-info btn-sm" />
-    <input id="resetButton" type="button" value="Reset" class="btn btn-default btn-sm" />
+    <input id="resetButtonC" type="button" value="Reset" class="btn btn-default btn-sm" />
 
 }
 <table class="table">
@@ -26,16 +27,16 @@
             @Html.ActionLink("Title", "Index", "Course", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Stream)
+            Stream
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Type)
+            Type
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.StartDate)
+            Start Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.EndDate)
+            End Date
         </th>
         <th>Students</th>
         <th>Assignments</th>
@@ -56,10 +57,10 @@
                 @Html.DisplayFor(modelItem => course.Type)
             </td>
             <td>
-                @course.StartDate.ToString("d")
+                @course.StartDate.ToString("yyyy/M/d")
             </td>
             <td>
-                @course.EndDate.ToString("d")
+                @course.EndDate.ToString("yyyy/M/d")
             </td>
             <td>
                 <ul class="list-unstyled">
@@ -78,7 +79,7 @@
                     @foreach (var assignment in course.Assignments)
                     {
                         <li>
-                            @assignment.Title 
+                            @assignment.Title
                         </li>
                     }
                 </ul>
@@ -89,12 +90,12 @@
                     @foreach (var trainer in course.Trainers)
                     {
                         <li>
-                            @trainer.FirstName  @trainer.LastName 
+                            @trainer.FirstName  @trainer.LastName
                         </li>
                     }
                 </ul>
             </td>
-            
+
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = course.CourseId }) |
                 @Html.ActionLink("Details", "Details", new { id = course.CourseId }) |
@@ -104,3 +105,20 @@
     }
 
 </table>
+Page @(Model.PageCount<Model.PageNumber?0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, x => Url.Action("Index", "Course", new { page = x }))
+
+
+@section scripts
+{
+    <script>
+
+        $("#resetButtonC").click(function (e) {
+
+            $("#searchTitle").val("");
+        }
+        );
+
+    </script>
+}

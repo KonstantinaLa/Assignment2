@@ -60,7 +60,7 @@
                     }
                 </ul>
             }
-        </dd>    
+        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Assignments)
         </dt>
@@ -81,7 +81,8 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">

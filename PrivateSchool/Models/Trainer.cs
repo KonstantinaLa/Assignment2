@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using FluentValidation.Attributes;
+using PrivateSchool.Models.Custom_Validations;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
 namespace PrivateSchool.Models
 {
+    [Validator(typeof(TrainerValidator))]
     public class Trainer
     {
         public Trainer()

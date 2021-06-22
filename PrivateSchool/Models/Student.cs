@@ -1,4 +1,5 @@
-﻿using PrivateSchool.Models.Custom_Validations;
+﻿using FluentValidation.Attributes;
+using PrivateSchool.Models.Custom_Validations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -6,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PrivateSchool.Models
 {
+    [Validator(typeof(StudentValidator))]
     public class Student
     {
         public Student()
@@ -22,8 +24,8 @@ namespace PrivateSchool.Models
         public string LastName { get; set; }
 
         [CustomValidation(typeof(ValidationMethods), "ValidationAdult")]
-        [Display(Name = "Date Of Birth")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Date Of Birth (year/month/day)")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/M/d}", ApplyFormatInEditMode = true)]
         public DateTime DateOfBirth { get; set; }
 
         [Display(Name = "Tuition Fees")]

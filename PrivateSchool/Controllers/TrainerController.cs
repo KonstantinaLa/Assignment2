@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using PagedList;
 using PrivateSchool.DAL;
 using PrivateSchool.Models;
 using PrivateSchool.Models.ViewModels;
@@ -22,17 +24,17 @@ namespace PrivateSchool.Controllers
             courserepos = new CourseRepos();
         }
 
-        public ActionResult Index(string searchTrainer, string sortOrder)
+        public ActionResult Index(string searchTrainer, string sortOrder, int? pSize, int? page)
         {
             var trainers = trainerrepos.GetAllTrainers();
 
             ViewBag.currentName = searchTrainer;
             ViewBag.currentSortOrder = sortOrder;
 
-            ViewBag.NSP = sortOrder == "FirstNameAsc" ? "FirstNameDesc" : "FirstNameAsc";
+            ViewBag.FNSP = String.IsNullOrEmpty(sortOrder) ? "FirstNameDesc" : "";
             ViewBag.LSP = sortOrder == "LastNameAsc" ? "LastNameDesc" : "LastNameAsc";
 
-            if (!string.IsNullOrWhiteSpace(searchTrainer))
+            if (!String.IsNullOrWhiteSpace(searchTrainer))
             {
                 trainers = trainers.Where(p => p.FirstName.ToUpper().Contains(searchTrainer.ToUpper())).ToList();
             }
@@ -50,7 +52,10 @@ namespace PrivateSchool.Controllers
                 default: trainers = trainers.OrderBy(s => s.FirstName).ToList(); break;
             }
 
-            return View(trainers);
+            int pageSize = pSize ?? 3;
+            int pageNumber = page ?? 1;
+
+            return View(trainers.ToPagedList(pageNumber, pageSize));
 
         }
 

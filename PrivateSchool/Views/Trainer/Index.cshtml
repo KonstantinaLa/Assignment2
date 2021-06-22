@@ -1,5 +1,5 @@
-﻿@model IEnumerable<PrivateSchool.Models.Trainer>
-
+﻿@model PagedList.IPagedList <PrivateSchool.Models.Trainer>
+@using PagedList.Mvc
 @{
     ViewBag.Title = "Index";
 }
@@ -7,7 +7,7 @@
 <h2>Trainer</h2>
 
 <p>
-    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-create" })
 </p>
 
 @using (Html.BeginForm("Index", "Trainer", FormMethod.Get))
@@ -18,19 +18,19 @@
     <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
 
     <input id="submitButton" type="submit" value="Search" class="btn btn-info btn-sm" />
-    <input id="resetButton" type="button" value="Reset" class="btn btn-default btn-sm" />
+    <input id="resetButtonT" type="button" value="Reset" class="btn btn-default btn-sm" />
 
 }
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Firstname", "Index", "Trainer", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
+            @Html.ActionLink("Firstname", "Index", "Trainer", new { sortOrder = ViewBag.FNSP, searchTrainer = ViewBag.CurrentName }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.ActionLink("Lastname", "Index", "Trainer", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
+            @Html.ActionLink("Lastname", "Index", "Trainer", new { sortOrder = ViewBag.lSP, searchTrainer = ViewBag.CurrentName }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Subject)
+            Subject
         </th>
         <th>Courses</th>
         <th>Action</th>
@@ -68,3 +68,21 @@
     }
 
 </table>
+
+Page @(Model.PageCount<Model.PageNumber?0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, x => Url.Action("Index", "Trainer", new { page = x }))
+
+
+@section scripts
+{
+    <script>
+
+        $("#resetButtonT").click(function (e) {
+
+            $("#searchTrainer").val("");
+        }
+        );
+
+    </script>
+}

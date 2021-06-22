@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-using PrivateSchool.Models;
+﻿using PrivateSchool.Models;
 using System.Data.Entity.ModelConfiguration;
 
 namespace PrivateSchool.DAL.Configurations
@@ -29,6 +24,17 @@ namespace PrivateSchool.DAL.Configurations
             Property(s => s.TuitionFees)
                 .IsRequired()
                 .HasColumnType("int");
+
+            //StudentAssignment
+            HasMany(s => s.Assignments)
+                .WithMany(a => a.Students)
+                .Map(m =>
+                {
+                    m.ToTable("StudentsAssignments");
+                    m.MapLeftKey("StudentId");
+                    m.MapRightKey("AssignmentId");
+
+                });
         }
     }
 }

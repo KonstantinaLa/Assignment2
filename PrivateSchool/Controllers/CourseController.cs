@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
+using PagedList;
 using PrivateSchool.Models;
 using PrivateSchool.Models.ViewModels;
 using PrivateSchool.Repositories;
@@ -26,14 +27,15 @@ namespace PrivateSchool.Controllers
             studentrepos = new StudentRepos();
         }
 
-        public ActionResult Index(string searchTitle, string sortOrder)
+        public ActionResult Index(string searchTitle, string sortOrder, int? pSize, int? page)
         {
             var courses = courserepos.GetAllCourses();
 
             ViewBag.currentTitle = searchTitle;
             ViewBag.currentSortOrder = sortOrder;
 
-            ViewBag.NSP = sortOrder == "TitleAsc" ? "TitleDesc" : "TitleAsc";
+            ViewBag.NSP = String.IsNullOrEmpty(sortOrder) ? "TitleDesc" : "";
+           
 
             if (!string.IsNullOrWhiteSpace(searchTitle))
             {
@@ -47,7 +49,11 @@ namespace PrivateSchool.Controllers
 
                 default: courses = courses.OrderBy(s => s.Title).ToList(); break;
             }
-            return View(courses);
+
+            int pageSize = pSize ?? 3;
+            int pageNumber = page ?? 1;
+
+            return View(courses.ToPagedList(pageNumber, pageSize));
 
         }
 

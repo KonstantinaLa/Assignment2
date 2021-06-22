@@ -13,8 +13,9 @@ namespace PrivateSchool.Models.Custom_Validations
             {
                 return ValidationResult.Success;
             }
-            return new ValidationResult(string.Format("Invalid date time, please try again!"), new List<string> { context.MemberName });
+            return new ValidationResult(String.Format("Invalid date time.You must be an adult, please try again!"), new List<string> { context.MemberName });
         }
+        
 
 
     }

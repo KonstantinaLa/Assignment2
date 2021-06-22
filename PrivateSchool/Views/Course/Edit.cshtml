@@ -1,4 +1,4 @@
-﻿@model PrivateSchool.Models.ViewModels.StudentViewModels.CourseEditViewModel
+﻿@model PrivateSchool.Models.ViewModels.CourseEditViewModel
 @{
     ViewBag.Title = "Edit";
 }
@@ -9,7 +9,7 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Course</h4>
         <hr />
@@ -51,14 +51,14 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Course.EndDate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Course.EndDate, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.Course.EndDate, new { htmlAttributes = new { @class = "form-control", min = Model.Course.StartDate.Date } })
                 @Html.ValidationMessageFor(model => model.Course.EndDate, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
             @Html.Label("SelectStudentIds", "Students", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBox("SelectStudentIds", null, htmlAttributes: new { @class = "form-control", size = "20" })
+                @Html.ListBox("SelectStudentIds", null, htmlAttributes: new { @class = "form-control selectpicker", size = "20" })
                 @*  @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })*@
             </div>
         </div>
@@ -66,21 +66,21 @@
         <div class="form-group">
             @Html.Label("SelectAssignmentIds", "Assignments", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBox("SelectAssignmentIds", null, htmlAttributes: new { @class = "form-control", size = "20" })
+                @Html.ListBox("SelectAssignmentIds", null, htmlAttributes: new { @class = "form-control selectpicker", size = "20" })
                 @*  @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })*@
             </div>
         </div>
         <div class="form-group">
             @Html.Label("SelectTrainerIds", "Courses", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.ListBox("SelectTrainerIds", null, htmlAttributes: new { @class = "form-control", size = "20" })
+                @Html.ListBox("SelectTrainerIds", null, htmlAttributes: new { @class = "form-control selectpicker ", size = "20" })
                 @*  @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })*@
             </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Save" class="btn btn-default" />
+                <input type="submit" id="btn-create" value="Save" class="btn btn-create" />
             </div>
         </div>
     </div>
@@ -90,6 +90,25 @@
     @Html.ActionLink("Back to List", "Index")
 </div>
 
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Scripts/bootstrap-select.min.js"></script>
+    <script>
+
+        $("#btn-create").click(function () {
+            var startDate = $("#Course_StartDate").val();
+            var endDate = $("#Course_EndDate").val();
+
+            if (startDate > endDate) {
+                alert("End date must be after start date!")
+                return false;
+            }
+            else {
+                return true;
+            }
+        });
+
+    </script>
 }

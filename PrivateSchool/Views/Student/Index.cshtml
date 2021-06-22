@@ -1,5 +1,6 @@
-﻿@using Antlr.Runtime.Tree
-@model IEnumerable<PrivateSchool.Models.Student>
+﻿@model PagedList.IPagedList<PrivateSchool.Models.Student>
+@using PagedList.Mvc
+
 
 @{
     ViewBag.Title = "Index";
@@ -8,7 +9,7 @@
 <h2>Student</h2>
 
 <p>
-    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-success" })
+    @Html.ActionLink("Create", "Create", null, new { @class = "btn btn-create" })
 </p>
 
 @using (Html.BeginForm("Index", "Student", FormMethod.Get))
@@ -25,22 +26,22 @@
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Firstname", "Index", "Student", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
+            @Html.ActionLink("Firstname", "Index", "Student", new { sortOrder = ViewBag.FNSP, searchStudent = ViewBag.CurrentName }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.ActionLink("Lastname", "Index", "Student", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
+            @Html.ActionLink("Lastname", "Index", "Student", new { sortOrder = ViewBag.LSP, searchStudent = ViewBag.CurrentName }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.DateOfBirth)
+            Date Of Birth
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TuitionFees)
+            Tuition Fees
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Courses)
+            Courses
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Assignments)
+           Assignments
         </th>
         <th>Actions</th>
     </tr>
@@ -55,7 +56,7 @@
                 @student.LastName
             </td>
             <td>
-                @student.DateOfBirth.ToString("d")
+                @student.DateOfBirth.ToString("yyyy/M/d")
             </td>
             <td>
                 @student.TuitionFees
@@ -77,6 +78,7 @@
 
                     @foreach (var assignment in student.Assignments)
                     {
+
                         <li>
                             @assignment.Title
                         </li>
@@ -92,63 +94,19 @@
     }
 
 </table>
-@section MYCustomCSS{
-    <style>
-        body {
-            background-color: #c2d8d5;
-            color: #4e4848;
-        }
 
-        .table {
-            margin: 10px;
-        }
+Page @(Model.PageCount<Model.PageNumber?0 : Model.PageNumber) of @Model.PageCount
 
-        #resetButton {
-            margin: 10px;
-            background-color: #e6dfdf;
-        }
+@Html.PagedListPager(Model, x => Url.Action("Index", "Student", new { page = x }))
 
-        #submitButton {
-            margin: 10px 10px 10px 0;
-            background-color: #E8A87c;
-        }
 
-        .btn-edit-details {
-            background-color: #85a1b2;
-            color: #f3e7e7;
-        }
-
-        .btn-delete {
-            background-color: #f55454;
-            color: #f3e7e7;
-        }
-
-        h2 {
-            color: #302e2e;
-        }
-
-        .table th {
-            background-color: #719e98;
-            color: #302e2e;
-        }
-
-        tr:hover {
-            background-color: #b5d0cc;
-        }
-
-        .sorting-btn {
-            color: inherit;
-        }
-    </style>
-
-}
 @section scripts
 {
     <script>
 
         $("#resetButtonS").click(function (e) {
 
-            $("#searchTitle").val("");
+            $("#searchStudent").val("");
         }
         );
 

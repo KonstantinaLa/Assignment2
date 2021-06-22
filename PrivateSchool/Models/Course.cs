@@ -1,10 +1,12 @@
-﻿using PrivateSchool.Models.Custom_Validations;
+﻿using FluentValidation.Attributes;
+using PrivateSchool.Models.Custom_Validations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace PrivateSchool.Models
 {
+    [Validator(typeof(CourseValidator))]
     public class Course
     {
         public Course()
@@ -19,18 +21,18 @@ namespace PrivateSchool.Models
         public string Stream { get; set; }
         public string Type { get; set; }
 
-        [Display(Name = "Start Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "Start Date (year/month/day)")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/M/d}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
 
-        [Display(Name = "End Date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "End Date (year/month/day)")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/M/d}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
+
 
         public virtual ICollection<Assignment> Assignments { get; set; }
         public virtual ICollection<Student> Students { get; set; }
         public virtual ICollection<Trainer> Trainers { get; set; }
-
 
 
     }

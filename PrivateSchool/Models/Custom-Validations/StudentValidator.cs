@@ -31,6 +31,7 @@ namespace PrivateSchool.Models.Custom_Validations
                 .NotEmpty()
                 .WithMessage("Is required");
                 
+                
 
 
         }

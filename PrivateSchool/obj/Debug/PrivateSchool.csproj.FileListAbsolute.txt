@@ -170,3 +170,7 @@ C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.Valid
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\System.ComponentModel.Annotations.dll
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.xml
 C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\FluentValidation.Mvc.xml
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\PagedList.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\PagedList.Mvc.dll
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\PagedList.xml
+C:\Users\konst\source\repos\Assignment2\PrivateSchool\bin\PagedList.Mvc.xml

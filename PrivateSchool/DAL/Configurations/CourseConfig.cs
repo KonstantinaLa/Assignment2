@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity.ModelConfiguration;
-using System.Linq;
-using System.Web;
+﻿using System.Data.Entity.ModelConfiguration;
 using PrivateSchool.Models;
 
 namespace PrivateSchool.DAL.Configurations
@@ -53,7 +49,7 @@ namespace PrivateSchool.DAL.Configurations
                     m.MapRightKey("StudentId");
 
                 });
-
+            
             //AssignmentCourse
             HasMany(t => t.Assignments)
                 .WithMany(c => c.Courses)
@@ -64,8 +60,7 @@ namespace PrivateSchool.DAL.Configurations
                     m.MapRightKey("AssignmentId");
 
                 });
-                
-                
+
         }
     }
 }

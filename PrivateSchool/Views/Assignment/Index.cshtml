@@ -1,5 +1,5 @@
-﻿@using Antlr.Runtime.Tree
-@model IEnumerable<PrivateSchool.Models.Assignment>
+﻿@model PagedList.IPagedList<PrivateSchool.Models.Assignment>
+@using PagedList.Mvc
 
 @{
     ViewBag.Title = "Index";
@@ -19,7 +19,7 @@
     <input type="hidden" name="sortOrder" value="@ViewBag.CurrentSortOrder" />
 
     <input id="submitButton" type="submit" value="Search" class="btn btn-sm btn-sub" />
-    <input id="resetButton" type="button" value="Reset" class="btn  btn-sm" />
+    <input id="resetButtonA" type="button" value="Reset" class="btn  btn-sm" />
 
 }
 <table class="table">
@@ -28,16 +28,16 @@
             @Html.ActionLink("Title", "Index", "Assignment", new { sortOrder = ViewBag.NSP, searchTitle = ViewBag.CurrentTitle }, new { @class = "sorting-btn" })
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.SubDate)
+            Submission Date
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.OralMark)
+            Oral Mark
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TotalMark)
+            Total Mark
         </th>
         <th>Courses</th>
         <th>Action</th>
@@ -53,7 +53,7 @@
                 @Html.DisplayFor(modelItem => assignment.Description)
             </td>
             <td>
-                @assignment.SubDate.ToString("d")
+                @assignment.SubDate.ToString("yyyy/M/d")
             </td>
             <td>
                 @Html.DisplayFor(modelItem => assignment.OralMark)
@@ -82,72 +82,17 @@
 
 </table>
 
-@section MYCustomCSS{
-    <style>
-        body {
-            background-color: #d0c4c4;
-            color: #222;
-        }
 
-        .table {
-            margin: 10px;
-        }
+Page @(Model.PageCount<Model.PageNumber?0 : Model.PageNumber) of @Model.PageCount
 
-        #resetButton {
-            margin: 10px;
-            background-color: #Ab6C82;
-            color:#f3e7e7 ;
-        }
+@Html.PagedListPager(Model, x => Url.Action("Index", "Assignment", new { page = x }))
 
-        #submitButton {
-            margin: 10px 10px 10px 0;
-            background-color: #D8737F;
-            color: #f3e7e7;
-        }
-        .btn-create {
-            background-color: #fcbb6d;
-            color: #4a4646;
-        }
-        .btn-edit-details {
-            background-color: #85a1b2;
-            color: #f3e7e7;
-        }
-
-        .btn-delete {
-            background-color: #f55454;
-            color: #f3e7e7;
-        }
-        .btn-edit {
-            background-color: #4853ae;
-            color: #e0d0d0;
-        }
-
-
-        h2 {
-            color: #302e2e;
-        }
-
-        .table th {
-            background-color: #475c7A;
-            color: #d0c4c4;
-        }
-
-        tr:hover {
-            background-color: #d4cece;
-        }
-
-        .sorting-btn {
-            color: inherit;
-        }
-    </style>
-
-}
 
 @section scripts
 {
     <script>
 
-        $("#resetButton").click(function (e) {
+        $("#resetButtonA").click(function (e) {
 
             $("#searchTitle").val("");
         }

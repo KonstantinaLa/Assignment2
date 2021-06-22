@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Web.Mvc;
-using PrivateSchool.DAL;
+using PagedList;
 using PrivateSchool.Models;
 using PrivateSchool.Models.ViewModels;
 using PrivateSchool.Repositories;
+
 
 namespace PrivateSchool.Controllers
 {
@@ -22,17 +24,19 @@ namespace PrivateSchool.Controllers
             assignmentrepos = new AssignmentRepos();
         }
 
-        public ActionResult Index(string searchStudent, string sortOrder)
+        public ActionResult Index(string searchStudent, string sortOrder, int? pSize, int? page)
         {
             var students = studentrepos.GetAllStudents();
 
             ViewBag.currentName = searchStudent;
             ViewBag.currentSortOrder = sortOrder;
 
-            ViewBag.NSP = sortOrder == "FirstNameAsc" ? "FirstNameDesc" : "FirstNameAsc";
+            ViewBag.FNSP = String.IsNullOrEmpty(sortOrder) ? "FirstNameDesc" : "";
+
+           
             ViewBag.LSP = sortOrder == "LastNameAsc" ? "LastNameDesc" : "LastNameAsc";
 
-            if (!string.IsNullOrWhiteSpace(searchStudent))
+            if (!String.IsNullOrWhiteSpace(searchStudent))
             {
                 students = students.Where(p => p.FirstName.ToUpper().Contains(searchStudent.ToUpper())).ToList();
             }
@@ -50,7 +54,10 @@ namespace PrivateSchool.Controllers
                 default: students = students.OrderBy(s => s.FirstName).ToList(); break;
             }
 
-            return View(students);
+            int pageSize = pSize ?? 3;
+            int pageNumber = page ?? 1;
+
+            return View(students.ToPagedList(pageNumber,pageSize));
 
         }
 

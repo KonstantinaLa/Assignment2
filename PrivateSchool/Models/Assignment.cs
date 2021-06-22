@@ -1,10 +1,13 @@
-﻿using System;
+﻿using FluentValidation.Attributes;
+using PrivateSchool.Models.Custom_Validations;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 
 namespace PrivateSchool.Models
 {
+    [Validator(typeof(AssignmentValidator))]
     public class Assignment
     {
         public Assignment()
@@ -16,8 +19,8 @@ namespace PrivateSchool.Models
         public string Title { get; set; }
         public string Description { get; set; }
 
-        [Display (Name = "Submition Date")]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [Display (Name = "Submission Date (year/month/day)")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/M/d}", ApplyFormatInEditMode = true)]
         public DateTime SubDate { get; set; }
 
         [Display(Name ="Oral Mark")]
@@ -27,5 +30,6 @@ namespace PrivateSchool.Models
         public int TotalMark { get; set; }
 
         public virtual ICollection<Course> Courses{ get; set; }
+        public virtual ICollection<Student> Students{ get; set; }
     }
 }
